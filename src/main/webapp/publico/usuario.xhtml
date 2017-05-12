@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" >
+
+<ui:composition template="/templates/interna.xhtml">
+	<ui:define name="titulo">
+    Cadastro de Usuarios
+	</ui:define>
+	<ui:define name="corpo">
+		<h:form>
+			<p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+			<h:inputHidden value="#{usuarioBean.usuario.codigo}" />
+			<h:inputHidden value="#{usuarioBean.usuario.ativo}" />
+			<h:inputHidden value="#{usuarioBean.destinoSalvar}" />
+			<h:inputHidden value="#{usuarioBean.usuario.login}" />
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Nome:" />
+				<p:inputText value="#{usuarioBean.usuario.nome}" required="true" requiredMessage="Insira um nome!" />
+
+				<h:outputLabel value="Data de Nascimento:" />
+				<p:calendar locale="pt" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{usuarioBean.usuario.nascimento}"
+					 required="true" requiredMessage="Insira uma data!">
+					<f:convertDateTime />
+				</p:calendar>
+
+				<h:outputLabel value="Celular:" />
+				<p:inputMask value="#{usuarioBean.usuario.celular}" required="true"  mask="(99)9999-9999"
+				requiredMessage="Digite o numero de celular." >
+				</p:inputMask>
+				<h:outputLabel value="E-mail:" for="email" id="email" />
+				<p:inputText value="#{usuarioBean.usuario.email}" maxlength="50"
+					required="true" requiredMessage="email Invalido!" />
+				
+				<h:outputLabel value="Idioma:" />
+				<p:selectOneMenu value="#{usuarioBean.usuario.idioma}">
+					<f:selectItem itemLabel="Portugues" itemValue="pt_BR" />
+					<f:selectItem itemLabel="English" itemValue="en_US" />
+					<f:selectItem itemLabel="Espanol" itemValue="es_ES" />
+				</p:selectOneMenu>
+
+				<h:outputLabel value="Login:" />
+				<p:outputLabel rendered="#{!empty usuarioBean.usuario.login}" 
+				value="#{usuarioBean.usuario.login}" required="true"
+					requiredMessage="Insira o login!" />
+					
+				<p:inputText rendered="#{empty usuarioBean.usuario.login}" 
+				value="#{usuarioBean.usuario.login}" required="true"
+					requiredMessage="Insira o login!" />	
+					
+				<h:outputLabel value="Senha:" />
+				<h:inputSecret value="#{usuarioBean.usuario.senha}" required="true"
+					requiredMessage="Insira uma Senha" />
+
+				<h:outputLabel value="Confirmar Senha" />
+				<h:inputSecret value="#{usuarioBean.confirmarSenha}" required="true"
+					requiredMessage="Insira uma Senha Novamente" redisplay="true" />
+				
+			</p:panelGrid>
+			<p:separator/>
+			<h:panelGroup rendered="#{empty contextoBean.usuarioLogado}">
+				<fieldset>
+					<legend>Conta Inicial</legend>
+					<p:panelGrid columns="2">
+						<h:outputLabel value="Descrição: " for="descricao" />
+						<p:inputText id="descricao" label="Descrição"
+							value="#{usuarioBean.conta.descricao}" required="true"
+							maxlength="45" />
+
+						<h:outputLabel value="Saldo Inicial: " for="saldoInicial" />
+						<p:inputText id="saldoInicial"
+							value="#{usuarioBean.conta.saldoInicial}" size="10">
+							<f:convertNumber minFractionDigits="2" />
+						</p:inputText>
+					</p:panelGrid>
+				</fieldset>
+			</h:panelGroup>
+			<p:separator/>
+			<p:commandButton value="Salvar" action="#{usuarioBean.actionSalvar}" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

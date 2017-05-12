@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" >
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<div align="center">
+			<h1>Administração de Usuários</h1>
+			<h:form>
+				<h:messages />
+				<p:dataTable style="text-align: center;" value="#{usuarioBean.listUsuarios}" var="usuario"
+					rules="rows" cellpadding="5">
+					<f:facet name="caption">
+				A listagem a seguir exibe a relação de todos os usurios do sistema.Voce podera
+				realizar ativacao ou desativacao, exclusão e edição para os usuarios. 
+				</f:facet>
+					<f:facet name="header">
+						<h:outputLabel value="Listagem de Usuarios" />
+					</f:facet>
+					<f:facet name="footer">
+						<h:outputLabel value="Final da Listagem" />
+					</f:facet>
+					<p:column>
+					<f:facet name="header">
+							<h:outputLabel value="Situação" />
+						</f:facet>
+						<h:commandLink action="#{usuarioBean.actionAtivar}">
+							<h:graphicImage library="imagens"
+								name="usuario_ativo_#{usuario.ativo}.png" style="border:0" />
+							<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+								value="#{usuario}" />
+						</h:commandLink>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Nome" />
+						</f:facet>
+						<h:outputText value="#{usuario.nome}" />
+					</p:column>
+					<p:column>
+					<f:facet name="header">
+							<h:outputLabel value="Idioma" />
+						</f:facet>
+						<h:graphicImage library="imagens"
+							name="bandeira_#{usuario.idioma}.png" style="border:0" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputLabel value="Email" />
+						</f:facet>
+						<h:outputText value="#{usuario.email}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Permissões</f:facet>
+						<h:commandLink
+							action="#{usuarioBean.atribuiPermissao(usuario, 'ROLE_ADMINISTRADOR')}"
+							title="Permissão Administrador">
+							<h:graphicImage library="imagens"
+								name="ROLE_ADMINISTRADOR_#{usuario.permissao.contains('ROLE_ADMINISTRADOR')}.png"
+								style="border:0" />
+						</h:commandLink>
+						<h:commandLink
+							action="#{usuarioBean.atribuiPermissao(usuario, 'ROLE_USUARIO_VIP')}"
+							title="Permissão Usuário VIP">
+							<h:graphicImage library="imagens"
+								name="ROLE_USUARIO_VIP_#{usuario.permissao.contains('ROLE_USUARIO_VIP')}.png"
+								style="border:0" />
+						</h:commandLink>
+					</p:column>
+					<p:column>
+					<f:facet name="header">
+							<h:outputLabel value="Editar" />
+						</f:facet>
+						<h:commandLink action="#{usuarioBean.actionEditar}">
+							<h:graphicImage library="imagens" name="editar16.png"
+								style="border:0" />
+							<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+								value="#{usuario}" />
+							<f:setPropertyActionListener
+								target="#{usuarioBean.destinoSalvar}" value="/admin/principal" />
+						</h:commandLink>
+					</p:column>
+					<p:column>
+					<f:facet name="header">
+							<h:outputLabel value="Excluir" />
+						</f:facet>
+						<h:commandLink action="#{usuarioBean.actionExcluir}"
+							onclick="if(!confirm('Confirma a exclusão do usuario #{usuario.nome}?')) return false;">
+							<h:graphicImage library="imagens" name="excluir16.png"
+								style="border:0" />
+							<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+								value="#{usuario}" />
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h:form id="edicao">
+			<!-- Aqui Entrará no formulario de contas de Usuarios -->
+			<p:messages id="messages" showDetail="true" autoUpdate="true"
+				closable="true" />
+			<h:inputHidden value="#{contaBean.selecionada.conta}" />
+			<h:inputHidden value="#{contaBean.selecionada.favorita}" />
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Descrição: " for="descricao" />
+				<p:inputText id="descricao"
+					value="#{contaBean.selecionada.descricao}" required="true"
+					maxlength="45" requiredMessage="Insira uma descrição!" />
+
+				<h:outputLabel value="Saldo Inicial: " for="saldoInicial" />
+				<p:inputText id="saldoInicial" required="true"
+					requiredMessage="Insira um Saldo inicial!"
+					value="#{contaBean.selecionada.saldoInicial}" size="10">
+					<f:convertNumber minFractionDigits="2" />
+				</p:inputText>
+
+				<p:commandButton value="Salvar" action="#{contaBean.actionSalvar}">
+					<f:ajax execute="@form" render=":edicao :listagem" />
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+		<p:separator />
+		<h:form id="listagem">
+			<p:dataTable style="text-align: center;" value="#{contaBean.lista}"
+				var="conta" rendered="#{!empty contaBean.lista}">
+				<p:column>
+					<f:facet name="header">Descrição</f:facet>
+					#{conta.descricao}
+				</p:column>
+				<p:column>
+					<f:facet name="header">Data Cadastro</f:facet>
+					<h:outputText value="#{conta.dataCadastro}">
+						<f:convertDateTime dateStyle="medium" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Saldo Inicial</f:facet>
+					<h:outputText value="#{conta.saldoInicial}"
+						style="text-align: right; display:block;">
+						<f:convertNumber minFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Tornar Favorita?</f:facet>
+					<h:commandLink action="#{contaBean.actionTornarFavorita}">
+						<f:ajax execute="@this" render=":listagem" />
+						<h:graphicImage library="imagens"
+							name="favorita16_#{conta.favorita}.png" />
+						<f:setPropertyActionListener target="#{contaBean.selecionada}"
+							value="#{conta}" />
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Editar</f:facet>
+					<h:commandLink>
+						<f:ajax execute="@this" render=":edicao" />
+						<h:graphicImage library="imagens" name="editar16.png" />
+						<f:setPropertyActionListener target="#{contaBean.selecionada}"
+							value="#{conta}" />
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Excluir</f:facet>
+					<h:commandLink action="#{contaBean.actionExcluir}">
+						<f:ajax execute="@this" render=":listagem" />
+						<h:graphicImage library="imagens" name="excluir16.png" />
+						<f:setPropertyActionListener target="#{contaBean.selecionada}"
+							value="#{conta}" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

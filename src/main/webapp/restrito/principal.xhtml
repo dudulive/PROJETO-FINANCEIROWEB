@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:p="http://primefaces.org/ui" >
+
+<ui:composition template="/templates/principal.xhtml">
+	<ui:define name="corpo">
+		<h1>Gerenciador Financeiro Pessoal</h1>
+	Usuario Logado #{request.remoteUser}
+	<br />
+	Nome do Usuario Logado #{contextoBean.usuarioLogado.nome}
+	<br />
+		<h:form>
+			<p:commandButton rendered="#{!empty contextoBean.usuarioLogado}" value="Conta" action="conta" />
+
+			<p:selectOneMenu style="top: 8px;" value="#{contextoBean.contaAtiva.conta}"
+				valueChangeListener="#{contextoBean.setContaAtiva}"
+				rendered="#{!empty contextoBean.usuarioLogado}" onchange="submit()">
+				<f:selectItems value="#{contaBean.lista}" var="conta"
+					itemValue="#{conta.conta}" itemLabel="#{conta.descricao}" />
+			</p:selectOneMenu>
+
+			<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
+				<h:commandLink action="/admin/principal" title="Adminidtrativo">
+					<h:graphicImage library="imagens" name="administrativo16.png" />
+				</h:commandLink>
+			</sec:ifAnyGranted>
+			<a
+				onclick="document.location='#{request.contextPath}/j_spring_security_logout'"
+				title="Sair"> <h:graphicImage library="imagens"
+					name="logout16.png" />
+			</a>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

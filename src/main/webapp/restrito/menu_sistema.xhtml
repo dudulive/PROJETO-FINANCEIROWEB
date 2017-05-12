@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<sec:ifAnyGranted roles="ROLE_USUARIO_VIP, ROLE_ADMINISTRADOR">
+		<h:form id="menu">
+			<table width="100%">
+				<tr>
+					<td>
+					<p:commandButton style="top: -10px" value="Categorias"
+							action="/restrito/categoria"
+							rendered="#{!empty contextoBean.usuarioLogado}" /> 
+					<p:commandButton
+							style="top: -10px" value="Contas" action="/restrito/conta"
+							rendered="#{!empty contextoBean.usuarioLogado}" /> 
+							<p:selectOneMenu
+							style="top: -2px;" value="#{contextoBean.contaAtiva.conta}"
+							valueChangeListener="#{contextoBean.setContaAtiva}"
+							onchange="submit()">
+							<f:selectItems value="#{contaBean.lista}" var="conta"
+								itemValue="#{conta.conta}" itemLabel="#{conta.descricao}" />
+						</p:selectOneMenu></td>
+					<td align="left"><sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
+							<h:commandLink action="/admin/principal" title="Administrativo">
+								<h:graphicImage library="imagens" name="administrativo16.png" />
+							</h:commandLink>
+							<h:commandLink action="/publico/usuario" title="Novo Usuario">
+								<h:graphicImage library="imagens" name="adicionar16.png" />
+								<f:setPropertyActionListener
+									target="#{usuarioBean.destinoSalvar}" value="/admin/principal" />
+							</h:commandLink>
+						</sec:ifAnyGranted> <h:commandLink action="/restrito/principal" title="Principal">
+							<h:graphicImage library="imagens" name="principal16.png" />
+						</h:commandLink> <h:outputLink value="javascript:void(0)"
+							onclick="document.location='#{request.contextPath}/j_spring_security_logout'"
+							title="Sair">
+							<h:graphicImage library="imagens" name="logout16.png" />
+						</h:outputLink></td>
+				</tr>
+			</table>
+		</h:form>
+	</sec:ifAnyGranted>
+</ui:composition>
+</html>
