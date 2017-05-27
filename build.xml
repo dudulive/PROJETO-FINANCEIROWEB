@@ -14,6 +14,12 @@
         <mkdir dir="${reports}/html/" />
     </target>
 
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" description="compile the source code ">
+           
+        </javac>
+    </target>
+
     <target name="clean">
         <delete dir="build" />
         <delete dir="${reports}" />
