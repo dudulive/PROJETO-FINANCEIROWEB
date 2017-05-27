@@ -1,27 +1,22 @@
 package financeiro.teste;
 
-import org.hibernate.Session;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import financeiro.util.ConnectionFactory;
+import financeiro.util.Calculo;
 
 public class ConexaoTeste {
 
 	@Test
 	public void test() {
-		// TODO Auto-generated method stub
-		Session session = null;
-					try {
-						session = ConnectionFactory.getSessionFactory().openSession();
-						session.getSessionFactory().getCurrentSession().beginTransaction();
-						session.getSessionFactory().getCurrentSession().getTransaction().commit();
-						session.getSessionFactory().getCurrentSession().close();
-						System.out.println("Sucesso");
-					} catch (Exception e){
-						System.out.println("Erro: " + e.getMessage() );
-					} finally{
-						session.close();
-					}
+		 float passaValor1 = 10;
+		 float passaValor2 = 5;
+		 float retornoEsperado = 15;
+		 
+		 float retornoFeito = Calculo.executaCalculo(passaValor1, passaValor2);
+		 assertEquals(retornoEsperado, retornoFeito,0);
+		
 	}
 
 }
