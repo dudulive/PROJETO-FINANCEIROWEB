@@ -15,8 +15,12 @@
     </target>
 
     <target name="compile" depends="init">
-        <javac srcdir="${src}" destdir="${build}" description="compile the source code ">
-           
+        <javac srcdir="${src}" destdir="${build}" description="compile the source code">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar" />
+                </fileset>
+            </classpath>
         </javac>
     </target>
 
